@@ -93,8 +93,14 @@ class Editor extends StatelessWidget {
   }
 }
 
+class ListaTransferencias extends StatefulWidget {
+  final List<Transferencia> _transferencias = List();
 
-class ListaTransferencias extends StatelessWidget {
+  @override
+  _ListaTransferenciasState createState() => _ListaTransferenciasState();
+}
+
+class _ListaTransferenciasState extends State<ListaTransferencias> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,11 +108,12 @@ class ListaTransferencias extends StatelessWidget {
         title: Text('Transferências'),
         backgroundColor: Colors.green,
       ),
-      body: Column(
-        children: <Widget>[
-          ItemTransferencia(Transferencia(100, 123100)),
-          ItemTransferencia(Transferencia(760, 123100))
-        ],
+      body: ListView.builder(
+        itemCount: widget._transferencias.length,
+        itemBuilder: (context, indice) {
+          final transferencia = widget._transferencias[indice];
+          return ItemTransferencia(transferencia);
+        },
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -118,12 +125,14 @@ class ListaTransferencias extends StatelessWidget {
           future.then((transferenciaRecebida){
             debugPrint('chegou no then');
             debugPrint('$transferenciaRecebida');
+            widget._transferencias.add(transferenciaRecebida);
           });
         },
       ),
     );
   }
 }
+
 
 class ItemTransferencia extends StatelessWidget {
 
